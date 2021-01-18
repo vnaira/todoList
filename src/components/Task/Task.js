@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
 import { Col, Row, Card, Button, Form } from 'react-bootstrap';
 import styles from './task.module.css';
+import PropTypes from 'prop-types';
+
 
 class Task extends Component {
+
+    static propTypes = {
+        data: PropTypes.object,
+        onToggle: PropTypes.func,
+        disabled: PropTypes.bool,
+        onDelete: PropTypes.func
+    }
+
     state = {
         selected: false
     }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { InputGroup, Row, Button, FormControl } from 'react-bootstrap';
 import idGenerator from '../../helpers/idGenerator';
+import PropTypes from 'prop-types';
 
 export default class AddTask extends Component {
     state = {
@@ -73,4 +74,8 @@ export default class AddTask extends Component {
             </Row>
         );
     }
+}
+AddTask.propTypes = {
+    disabled: PropTypes.bool.isRequired,
+    onAdd: PropTypes.func.isRequired
 }
