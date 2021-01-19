@@ -3,6 +3,7 @@ import styles from './todo.css';
 import Task from '../Task/Task.js';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import AddTask from '../AddTask/AddTask';
+import Confirm from '../Confirm';
 
 
 export default class ToDo extends Component {
@@ -11,7 +12,8 @@ export default class ToDo extends Component {
     state = {
         inputValue: '',
         tasks: [],
-        selectedTasks: new Set()
+        selectedTasks: new Set(),
+        showConfirm: false
     }
 
     addTask = (newTask) => {
@@ -62,15 +64,39 @@ export default class ToDo extends Component {
 
         this.setState({
             tasks: newTasks,
-            selectedTasks: new Set() //datarkum enq
+            selectedTasks: new Set(), //datarkum enq
+            showConfirm: false
+        })
+    }
+
+    toggleConfirm = () => {
+        this.setState({
+            showConfirm: !this.state.showConfirm,
+        })
+    }
+
+    selectAll = () => {
+        const taskIds = this.state.tasks.map((task) => task._id);
+        this.setState({
+            selectedTasks: new Set(taskIds),
+        })
+    }
+
+    deselectAll = () => {
+        this.setState({
+            selectedTasks: new Set(),
+        })
+    }
+    closeModal = () => {
+        this.setState({
+            showConfirm: false,
         })
     }
 
 
-
     render() {
         // state petq e copy anel heto popoxel u dnel texy
-        const { tasks, selectedTasks } = this.state;
+        const { tasks, selectedTasks, showConfirm } = this.state;
         const headStyle = {
             color: 'red',
             fontSize: '25px'
@@ -89,6 +115,7 @@ export default class ToDo extends Component {
                         onToggle={this.toggleTask}
                         disabled={!!selectedTasks.size}
                         onDelete={this.deleteTask}
+                        selected={selectedTasks.has(el._id)}
                     />
                 </Col>
             )
@@ -103,18 +130,52 @@ export default class ToDo extends Component {
                         onAdd={this.addTask}
                     />
                     <Row>
-                        <Button
-                            onClick={this.deleteSelected}
-                            variant="danger"
-                            disabled={!selectedTasks.size}
-                        >
-                            Delete selected
+                        <Col>
+                            <Button
+                                onClick={this.addNewTask}
+                                variant="primary"
+                            >
+                                Add new task
                         </Button>
+                        </Col>
+                        <Col>
+                            <Button
+                                onClick={this.selectAll}
+                                variant="warning"
+                                disabled={(selectedTasks.size === tasks.length)}
+                            >
+                                Select all
+                        </Button>
+                        </Col>
+                        <Col>
+                            <Button
+                                onClick={this.deselectAll}
+                                variant="warning"
+
+                            >
+                                Deselect all
+                        </Button>
+                        </Col>
+                        <Col>
+                            <Button
+                                onClick={this.toggleConfirm}
+                                variant="danger"
+                                disabled={!selectedTasks.size}
+                            >
+                                Delete selected
+                        </Button>
+                        </Col>
                     </Row>
                     <Row>
                         {taskCom}
                     </Row>
                 </Container>
+                {showConfirm &&
+                    <Confirm
+                        onConfirm={this.deleteSelected}
+                        onClose={this.toggleConfirm}
+                        taskCount={selectedTasks.size}
+                    />}
             </div>
         )
     }

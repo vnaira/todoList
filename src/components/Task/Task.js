@@ -7,28 +7,22 @@ import PropTypes from 'prop-types';
 class Task extends Component {
 
     static propTypes = {
-        data: PropTypes.object,
-        onToggle: PropTypes.func,
-        disabled: PropTypes.bool,
-        onDelete: PropTypes.func
-    }
-
-    state = {
-        selected: false
+        data: PropTypes.object.isRequired,
+        onToggle: PropTypes.func.isRequired,
+        disabled: PropTypes.bool.isRequired,
+        onDelete: PropTypes.func.isRequired,
+        selected: PropTypes.bool.isRequired
     }
 
     handleChange = () => {
         const { data, onToggle } = this.props;
         onToggle(data._id);
-        this.setState({
-            selected: !this.state.selected,
-        });
+
     };
 
     render() {
         const task = this.props.data;
-        const { selected } = this.state;
-        const { disabled, onDelete } = this.props;
+        const { disabled, onDelete, selected } = this.props;
 
 
         return (
@@ -39,6 +33,7 @@ class Task extends Component {
                         <Col className="text-right">
                             <Form.Check
                                 onChange={this.handleChange}
+                                checked={selected}
                             />
                         </Col>
                     </Row>
