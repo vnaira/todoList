@@ -13,7 +13,8 @@ export default class ToDo extends Component {
         inputValue: '',
         tasks: [],
         selectedTasks: new Set(),
-        showConfirm: false
+        showConfirm: false,
+        addNewTasModal: false
     }
 
     addTask = (newTask) => {
@@ -22,6 +23,7 @@ export default class ToDo extends Component {
 
         this.setState({
             tasks: tasks,
+            addNewTasModal: false
             // kam vor nuynn e ES6-um
             // tasks, //ete key u proprty nuynn en
 
@@ -92,11 +94,16 @@ export default class ToDo extends Component {
             showConfirm: false,
         })
     }
+    addNewTaskModal = () => {
+        this.setState({
+            addNewTasModal: !this.state.addNewTasModal
+        })
+    }
 
 
     render() {
         // state petq e copy anel heto popoxel u dnel texy
-        const { tasks, selectedTasks, showConfirm } = this.state;
+        const { tasks, selectedTasks, showConfirm, addNewTasModal } = this.state;
         const headStyle = {
             color: 'red',
             fontSize: '25px'
@@ -125,14 +132,11 @@ export default class ToDo extends Component {
 
                 <Container>
                     <h2 style={headStyle}>Todo list</h2>
-                    <AddTask
-                        disabled={!!selectedTasks.size}
-                        onAdd={this.addTask}
-                    />
+
                     <Row>
                         <Col>
                             <Button
-                                onClick={this.addNewTask}
+                                onClick={this.addNewTaskModal}
                                 variant="primary"
                             >
                                 Add new task
@@ -176,6 +180,14 @@ export default class ToDo extends Component {
                         onClose={this.toggleConfirm}
                         taskCount={selectedTasks.size}
                     />}
+                {addNewTasModal &&
+
+                    <AddTask
+                        onClose={this.addNewTaskModal}
+                        onConfirm={this.deleteSelected}
+                        onAdd={this.addTask}
+                    />
+                }
             </div>
         )
     }

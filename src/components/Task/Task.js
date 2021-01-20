@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Col, Row, Card, Button, Form } from 'react-bootstrap';
 import styles from './task.module.css';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons'
 
 
 class Task extends Component {
@@ -48,8 +50,15 @@ class Task extends Component {
                         onClick={() => onDelete(task._id)}
                         disabled={disabled}
                     >
+                        <FontAwesomeIcon icon={faTrash} />
                         Delete task
-                            </Button>
+                    </Button>
+                    <Button variant="success"
+                        onClick={() => onDelete(task._id)}
+                    >
+                        <FontAwesomeIcon icon={faEdit} />
+                        Edit task
+                    </Button>
                 </Card.Body>
             </Card>
         );
