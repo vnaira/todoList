@@ -2,33 +2,30 @@ import React, { Component } from 'react';
 import { Col, Row, Card, Button, Form } from 'react-bootstrap';
 import styles from './task.module.css';
 import PropTypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons'
 
 
 class Task extends Component {
 
     static propTypes = {
-        data: PropTypes.object,
-        onToggle: PropTypes.func,
-        disabled: PropTypes.bool,
-        onDelete: PropTypes.func
-    }
-
-    state = {
-        selected: false
+        data: PropTypes.object.isRequired,
+        onToggle: PropTypes.func.isRequired,
+        disabled: PropTypes.bool.isRequired,
+        onDelete: PropTypes.func.isRequired,
+        selected: PropTypes.bool.isRequired,
+        onEdit: PropTypes.func.isRequired
     }
 
     handleChange = () => {
         const { data, onToggle } = this.props;
         onToggle(data._id);
-        this.setState({
-            selected: !this.state.selected,
-        });
+
     };
 
     render() {
         const task = this.props.data;
-        const { selected } = this.state;
-        const { disabled, onDelete } = this.props;
+        const { disabled, onDelete, selected, onEdit } = this.props;
 
 
         return (
@@ -39,6 +36,7 @@ class Task extends Component {
                         <Col className="text-right">
                             <Form.Check
                                 onChange={this.handleChange}
+                                checked={selected}
                             />
                         </Col>
                     </Row>
@@ -53,8 +51,15 @@ class Task extends Component {
                         onClick={() => onDelete(task._id)}
                         disabled={disabled}
                     >
+                        <FontAwesomeIcon icon={faTrash} />
                         Delete task
-                            </Button>
+                    </Button>
+                    <Button variant="success"
+                        onClick={() => onEdit(task)}
+                    >
+                        <FontAwesomeIcon icon={faEdit} />
+                        Edit task
+                    </Button>
                 </Card.Body>
             </Card>
         );

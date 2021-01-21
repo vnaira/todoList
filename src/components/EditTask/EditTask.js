@@ -1,22 +1,15 @@
 import React, { Component } from 'react';
-import { InputGroup, Row, Button, FormControl, Modal, Form } from 'react-bootstrap';
-import idGenerator from '../../helpers/idGenerator';
+import { InputGroup, Row, Button, FormControl, Modal } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-export default class AddTask extends Component {
-    state = {
-        title: '',
-        description: '',
-
+export default class EditTask extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            //ira mej ka title,description
+            ...props.task
+        }
     }
-
-    //mi tarberak
-    // handleChange = (value, name) => {
-    //     this.setState({
-    //         //vor inputi name ekav, dra value-n el set e anum
-    //         [name]: value
-    //     })
-    // }
 
     handleChange = (event) => {
         this.setState({
@@ -39,37 +32,27 @@ export default class AddTask extends Component {
             return
         }
 
-        const newTask = {
-            _id: idGenerator(),
-            title: title,
-            description: description ? description : 'Task description does not exist'
-            //kam vor nuynn e
-            //title,
-            //description
-        };
-
-        this.props.onAdd(newTask);
-        // this.setState({
-        //     title: '',
-        //     description: ''
-        // })
-
+        this.props.onSave({
+            _id: this.state._id,
+            title,
+            description
+        });
     }
 
     render() {
         const { onClose } = this.props;
-        const { props } = this;
+        const { title, description } = this.state;
 
         return (
             <Modal
                 show={true}
                 onHide={onClose}
                 centered
-                size="lg"
+                size="md"
             >
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        Add new task
+                        Edit task
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -77,12 +60,10 @@ export default class AddTask extends Component {
                         <InputGroup className="m-2">
                             <FormControl
                                 placeholder="Task title"
-                                //sa mi tarberak e
-                                //onChange={(event) => this.handleChange(event.target.value, 'title')}
                                 onChange={this.handleChange}
                                 name="title"
                                 onKeyPress={this.handleKeyPress}
-
+                                value={title}
                             />
                         </InputGroup>
                         <InputGroup className="m-2">
@@ -91,7 +72,7 @@ export default class AddTask extends Component {
                                 row={4}
                                 name="description"
                                 onChange={this.handleChange}
-
+                                value={description}
                             />
 
                         </InputGroup>
@@ -102,7 +83,7 @@ export default class AddTask extends Component {
                         onClick={this.handleSubmit}
                         variant="success"
                     >
-                        Add
+                        Save
                     </Button>
                     <Button
                         variant="secondary"
@@ -117,8 +98,8 @@ export default class AddTask extends Component {
         );
     }
 }
-AddTask.propTypes = {
-    onConfirm: PropTypes.func.isRequired,
-    onAdd: PropTypes.func.isRequired,
+EditTask.propTypes = {
+    task: PropTypes.object.isRequired,
+    onSave: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
 }
