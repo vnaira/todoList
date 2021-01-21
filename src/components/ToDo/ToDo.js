@@ -3,6 +3,7 @@ import styles from './todo.css';
 import Task from '../Task/Task.js';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import AddTask from '../AddTask/AddTask';
+import EditTask from '../EditTask/EditTask';
 import Confirm from '../Confirm';
 
 
@@ -14,7 +15,8 @@ export default class ToDo extends Component {
         tasks: [],
         selectedTasks: new Set(),
         showConfirm: false,
-        addNewTasModal: false
+        addNewTasModal: false,
+        hasEditableTask: null,
     }
 
     addTask = (newTask) => {
@@ -100,10 +102,24 @@ export default class ToDo extends Component {
         })
     }
 
+    saveTask = (editTask) => {
+        //copy enq anum tasky, vor popoxenq
+        const tasks = [...this.state.tasks];
+        const index = tasks.findIndex((task) => task._id === editTask._id);
+        tasks[index] = editTask;
+        this.setState({
+            tasks,
+            hasEditableTask: null
+        });
+
+    }
+    handleEdit = (editTask) => {
+        this.setState({ hasEditableTask: editTask });
+    };
 
     render() {
         // state petq e copy anel heto popoxel u dnel texy
-        const { tasks, selectedTasks, showConfirm, addNewTasModal } = this.state;
+        const { tasks, selectedTasks, showConfirm, addNewTasModal, hasEditableTask } = this.state;
         const headStyle = {
             color: 'red',
             fontSize: '25px'
@@ -123,6 +139,7 @@ export default class ToDo extends Component {
                         disabled={!!selectedTasks.size}
                         onDelete={this.deleteTask}
                         selected={selectedTasks.has(el._id)}
+                        onEdit={this.handleEdit}
                     />
                 </Col>
             )
@@ -186,6 +203,13 @@ export default class ToDo extends Component {
                         onClose={this.addNewTaskModal}
                         onConfirm={this.deleteSelected}
                         onAdd={this.addTask}
+                    />}
+                {hasEditableTask &&
+                    <EditTask
+                        onClose={() => this.saveTask(null)}
+                        task={hasEditableTask}
+                        onSave={this.saveTask}
+
                     />
                 }
             </div>

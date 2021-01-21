@@ -13,7 +13,8 @@ class Task extends Component {
         onToggle: PropTypes.func.isRequired,
         disabled: PropTypes.bool.isRequired,
         onDelete: PropTypes.func.isRequired,
-        selected: PropTypes.bool.isRequired
+        selected: PropTypes.bool.isRequired,
+        onEdit: PropTypes.func.isRequired
     }
 
     handleChange = () => {
@@ -24,7 +25,7 @@ class Task extends Component {
 
     render() {
         const task = this.props.data;
-        const { disabled, onDelete, selected } = this.props;
+        const { disabled, onDelete, selected, onEdit } = this.props;
 
 
         return (
@@ -54,7 +55,7 @@ class Task extends Component {
                         Delete task
                     </Button>
                     <Button variant="success"
-                        onClick={() => onDelete(task._id)}
+                        onClick={() => onEdit(task)}
                     >
                         <FontAwesomeIcon icon={faEdit} />
                         Edit task
