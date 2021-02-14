@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { InputGroup, Row, Button, FormControl, Modal, Form } from 'react-bootstrap';
 import idGenerator from '../../helpers/idGenerator';
 import PropTypes from 'prop-types';
 
-export default class AddTask extends Component {
+export default class AddTask extends PureComponent {
     state = {
         title: '',
         description: '',

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import styles from './todo.css';
 import Task from '../Task/Task.js';
 import { Container, Row, Col, Button } from 'react-bootstrap';
@@ -7,8 +7,7 @@ import EditTask from '../EditTask/EditTask';
 import Confirm from '../Confirm';
 
 
-export default class ToDo extends Component {
-
+export default class ToDo extends PureComponent {
 
     state = {
         inputValue: '',
@@ -22,6 +21,14 @@ export default class ToDo extends Component {
     addTask = (newTask) => {
 
         const tasks = [...this.state.tasks, newTask];
+
+        fetch('http://localhost:3001', {
+            method: 'POST',
+            body: JSON.stringify(newTask),
+            // headers: {
+            //     'Content-Type': 'application/json'
+            // }
+        });
 
         this.setState({
             tasks: tasks,
